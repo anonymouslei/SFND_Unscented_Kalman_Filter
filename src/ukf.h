@@ -1,6 +1,7 @@
 #ifndef UKF_H
 #define UKF_H
 
+#include <fstream>
 #include "Eigen/Dense"
 #include "measurement_package.h"
 
@@ -41,11 +42,6 @@ class UKF {
    */
   void UpdateRadar(MeasurementPackage meas_package);
 
-private:
-
-    void UKF::SigmaPointPrediction(Eigen::MatrixXd& x_pred, Eigen::MatrixXd* Xsig_out, double delta_t);
-
-    void UKF::GenerateAugmentedSigmaPoints(MatrixXd& Xsig_out);
   // initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
 
@@ -111,6 +107,17 @@ private:
 
   // measurement radar noise covariance matrix
   Eigen::MatrixXd R_radar_;
+
+  Eigen::MatrixXd H_laser_;
+
+private:
+
+  void SigmaPointPrediction(Eigen::MatrixXd& x_pred, Eigen::MatrixXd* Xsig_out, double delta_t);
+
+  void GenerateAugmentedSigmaPoints(Eigen::MatrixXd* Xsig_out);
+
+  void PredictMeanAndCovariance(Eigen::VectorXd* x_out, Eigen::MatrixXd* P_out);
+
 
 
 };
